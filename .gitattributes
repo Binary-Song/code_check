@@ -1,0 +1,4 @@
+[attr]DefaultRules NoBinaryOutsideLFS NoBomRule NoCRRule NoTabRule
+
+*       DefaultRules text=auto
+*.cpp   CppNoLogRule
