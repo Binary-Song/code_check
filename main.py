@@ -95,7 +95,7 @@ def check_diff(repo_path : Path, rules: list[Rule], incremental=False):
     ok = True
     for file, diff in file_to_diff.items():
         file_type = get_file_type(file, diff)
-        file_attrs = get_file_attrs(file)
+        file_attrs = get_file_attrs(file)   
         for rule in rules:
             if not rule.applies_to(file_type):
                 continue
@@ -109,9 +109,11 @@ def check_diff(repo_path : Path, rules: list[Rule], incremental=False):
                 ok = False
                 for error in chk.errors:
                     if error.line_no != -1:
-                        print_err(f"Error: Rule '{rule.name()}' failed for {file}. See diff at {diff_path}:{error.line_no}. Message: {error.message}")
+                        print_err(f"Error: '{rule.name()}' did not pass for {file}. See diff at {diff_path}:{error.line_no}. Message: {error.message}")
                     else:
-                        print_err(f"Error: Rule '{rule.name()}' failed for {file}. Message: {error.message}")
+                        print_err(f"Error: '{rule.name()}' did not pass for {file}. Message: {error.message}")
+            else:
+                print(f"'{rule.name()}' passed for {file}")
     return ok
 
 def verify_rules(rules: list[Rule]):
@@ -124,7 +126,7 @@ def verify_rules(rules: list[Rule]):
 
 if __name__ == "__main__":
 
-    parser = argparse.ArgumentParser(description="Check for encoding issues in git diffs.")
+    parser = argparse.ArgumentParser(description="Check for issues in git diffs.")
     parser.add_argument('repo_path', type=str, help='Path to the repository to check.')
     parser.add_argument('--full', action='store_true', help='Run a full check instead of an incremental one.')
     args = parser.parse_args()
@@ -140,7 +142,7 @@ if __name__ == "__main__":
         passed = False
     
     if passed:
-        print("Encoding checks passed.")
+        print("All checks passed.")
         sys.exit(0)
     else:
         sys.exit(1)

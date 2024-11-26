@@ -2,3 +2,4 @@
 
 *       DefaultRules text=auto
 *.cpp   CppNoLogRule
+*.h     CppNoLogRule
